@@ -1,5 +1,6 @@
 package com.lnjhhhh;
 
+import com.lnjhhhh.util.RedisUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,22 +12,25 @@ import java.util.List;
 public class RedisSpringBootApplicationTests {
 
     @Autowired
-    private RedisTemplate<Object, Object> redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
+
+    @Autowired
+    private RedisUtils redisUtils;
 
 
     @Test
     void contextLoads() {
-        BoundValueOperations<Object, Object> name = redisTemplate.boundValueOps("name");
-        BoundStreamOperations<Object, Object, Object> age = redisTemplate.boundStreamOps("age");
+        BoundValueOperations<String, Object> name = redisTemplate.boundValueOps("name");
+        BoundStreamOperations<String, Object, Object> age = redisTemplate.boundStreamOps("age");
         redisTemplate.multi();
         redisTemplate.exec();
-        ValueOperations<Object, Object> valueOperations = redisTemplate.opsForValue();
+        ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
     }
 
     @Test
     public void testBoundXxxOps() {
         //获取一个绑定数据类型为String，并且key为name的操作对象
-        BoundValueOperations<Object, Object> name = redisTemplate.boundValueOps("name");
+        BoundValueOperations<String, Object> name = redisTemplate.boundValueOps("name");
         //因为上面已经设置了key为name，所以这里只需要传递值即可
         name.set("zhangsan");
         /*
@@ -41,7 +45,7 @@ public class RedisSpringBootApplicationTests {
 
     @Test
     public void testXxxOps() {
-        ValueOperations<Object, Object> value = redisTemplate.opsForValue();
+        ValueOperations<String, Object> value = redisTemplate.opsForValue();
         value.set("name", "lisi");
         /*
             opsForValue()：获取一个操作String类型的对象
@@ -52,6 +56,12 @@ public class RedisSpringBootApplicationTests {
             opsForZSet()：获取一个操作ZSet类型的对象
             opsForHyperLogLog()：获取一个操作HyperLogLog类型的对象
          */
+    }
+
+    @Test
+    public void testRedisUtils() {
+        boolean set = redisUtils.set("name", "zhangsan");
+        System.out.println(set);
     }
 
 }
