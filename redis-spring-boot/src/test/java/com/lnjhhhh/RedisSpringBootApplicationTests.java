@@ -20,6 +20,7 @@ public class RedisSpringBootApplicationTests {
 
     @Test
     void contextLoads() {
+
         BoundValueOperations<String, Object> name = redisTemplate.boundValueOps("name");
         BoundStreamOperations<String, Object, Object> age = redisTemplate.boundStreamOps("age");
         redisTemplate.multi();
@@ -62,6 +63,7 @@ public class RedisSpringBootApplicationTests {
     public void testRedisUtils() {
         boolean set = redisUtils.set("name", "zhangsan");
         System.out.println(set);
+
     }
 
 }
